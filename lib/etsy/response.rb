@@ -33,7 +33,7 @@ module Etsy
     end
 
     def body
-      @raw_response.body
+      @raw_response
     end
 
     def code
