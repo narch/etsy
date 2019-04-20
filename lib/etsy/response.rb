@@ -30,10 +30,11 @@ module Etsy
     def to_hash
       validate!
       @hash ||= json
+      #@hash.merge(requests_remaining)
     end
 
     def body
-      @raw_response
+      @raw_response.body 
     end
 
     def code
@@ -77,9 +78,15 @@ module Etsy
     def data
       @raw_response.body
     end
+    
+    def requests_remaining
+      {:rate_limiting => {:limit => @raw_response['X-RateLimit-Limit'], :remaining => @raw_response['X-RateLimit-Remaining']}}
+    end
 
     def json
       @hash ||= JSON.parse(data)
+      @hash.merge(requests_remaining)
+      puts "Remaining requests #{requests_remaining}"
     end
 
     def validate!
